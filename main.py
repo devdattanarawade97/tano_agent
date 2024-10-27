@@ -62,6 +62,7 @@ async def text_agent_endpoint(
 @app.post("/image-query")
 async def image_agent_endpoint(
     user_message: str,
+    file: UploadFile = File(...),
 ):
     """
     Handles an image query from the user and returns a response from the image agent.
@@ -76,14 +77,22 @@ async def image_agent_endpoint(
         HTTPException: If there is an error with the request.
     """
     try:
-        # Start with the text agent
-        agent = image_agent
-        messages = [{"role": "user", "content": user_message}]
 
+
+        agent = image_agent
+        messages = [
+            {"role": "user", "content": user_message},
+        ]
 
         response = client.run(
                 agent=agent,
                 messages=messages,
+            )
+
+        content = response.messages[-1]["content"]
+        if "Error generating image" in content:
+            raise HTTPException(
+                status_code=500, detail=f"Error generating image: {content}"
             )
 
         print(f"{response.messages[-1]['sender']}: {response}")

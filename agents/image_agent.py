@@ -37,8 +37,11 @@ def generate_image(prompt):
     except Exception as e:
         return f"Error generating image: {str(e)}"
 
+
+
+
 image_agent = Agent(
     name="Image Agent",
-    instructions="You are an AI that can generate images. use function for generating image",
+    instructions=f"You are an helpful AI agent that can generate images as well answer questions if info is provided. use appropriate function for generating image",
     functions=[generate_image]
 )
