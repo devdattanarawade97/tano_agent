@@ -9,6 +9,7 @@ import io
 import requests
 from agents.text_agent import text_agent
 from agents.image_agent import image_agent
+from schema.text_query_schema import TextQueryRequest
 
 # Load environment variables
 load_dotenv()
@@ -25,7 +26,7 @@ client = Swarm(client=openai.Client())
 
 @app.post("/text-query")
 async def text_agent_endpoint(
-    user_message: str,
+    request: TextQueryRequest,
 ):
     """
     Handles a text query from the user and returns a response from the text agent.
@@ -41,6 +42,7 @@ async def text_agent_endpoint(
     """
     
     try:
+        user_message = request.user_message
         # Start with the text agent
         agent = text_agent
         messages = [{"role": "user", "content": user_message}]
@@ -53,7 +55,7 @@ async def text_agent_endpoint(
 
         print(f"{response.messages[-1]['sender']}: {response.messages[-1]['content']}")
         content = response.messages[-1]["content"]
-        return {"response": content}
+        return {"content": content}
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
