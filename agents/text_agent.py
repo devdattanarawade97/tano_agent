@@ -83,6 +83,7 @@ gemini_agent = Agent(
     functions=[transfer_to_real_info_agent , get_gemini_chat],
 )
 
+# base agent
 text_agent = Agent(
     name="Text Agent",
     instructions="""You are an helpful agent .if user specify he want answer from 'gemini' then transfer conversation to Gemini Agent. if you dont know answer or user mentions 'cohere'then transfer conversation to Real Info Agent for more information.""",

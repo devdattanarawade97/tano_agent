@@ -39,7 +39,7 @@ def generate_image(prompt):
 
 
 
-
+# base agent
 image_agent = Agent(
     name="Image Agent",
     instructions=f"You are an helpful AI agent that can generate images as well answer questions if info is provided. use appropriate function for generating image",
