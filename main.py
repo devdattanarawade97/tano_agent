@@ -9,8 +9,9 @@ import io
 import requests
 from agents.text_agent import text_agent
 from agents.image_agent import image_agent
+from agents.docs_agent import docs_agent
 from schema.text_query_schema import TextQueryRequest
-
+from schema.docs_query_schema import DocsQueryRequest
 # Load environment variables
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -100,6 +101,42 @@ async def image_agent_endpoint(
         print(f"{response.messages[-1]['sender']}: {response}")
 
         return {"response": content}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+
+
+@app.post("/docs-query")
+async def docs_agent_endpoint(
+    request: DocsQueryRequest,
+):
+   
+    try:
+        
+        # print(f'relevant docs : {request.relevant_docs}')
+        agent = docs_agent
+        messages = [
+            {"role": "user", "content": request.user_query+request.relevant_docs},
+        ]
+
+        response = client.run(
+                agent=agent,
+                messages=messages,
+            )
+        
+        # print(f'response : {response}')
+        
+        content = response.messages[-1]["content"]
+        if "Error generating response" in content:
+            raise HTTPException(
+                status_code=500, detail=f"Error generating docs response: {content}"
+            )
+
+        print(f"{response.messages[-1]['sender']}: {response}")
+
+        return {"content": content}
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
