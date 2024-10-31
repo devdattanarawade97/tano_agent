@@ -134,6 +134,7 @@ async def docs_agent_endpoint(
                 status_code=500, detail=f"Error generating docs response: {content}"
             )
 
+
         print(f"{response.messages[-1]['sender']}: {response}")
 
         return {"content": content}
