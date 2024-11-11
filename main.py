@@ -22,9 +22,6 @@ client = Swarm(client=openai.Client())
 
 
 
-
-
-
 @app.post("/text-query")
 async def text_agent_endpoint(
     request: TextQueryRequest,
