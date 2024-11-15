@@ -12,10 +12,19 @@ from agents.image_agent import image_agent
 from agents.docs_agent import docs_agent
 from schema.text_query_schema import TextQueryRequest
 from schema.docs_query_schema import DocsQueryRequest
+from fastapi.middleware.cors import CORSMiddleware
+from schema.image_query_schema import ImageQueryRequest
 # Load environment variables
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins; customize as needed
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all HTTP methods
+    allow_headers=["*"],  # Allows all headers
+)
 
 # Initialize Swarm client
 client = Swarm(client=openai.Client())
@@ -61,8 +70,7 @@ async def text_agent_endpoint(
 
 @app.post("/image-query")
 async def image_agent_endpoint(
-    user_message: str,
-    file: UploadFile = File(...),
+    request: ImageQueryRequest,
 ):
     """
     Handles an image query from the user and returns a response from the image agent.
@@ -81,7 +89,7 @@ async def image_agent_endpoint(
 
         agent = image_agent
         messages = [
-            {"role": "user", "content": user_message},
+            {"role": "user", "content": request.user_message},
         ]
 
         response = client.run(
