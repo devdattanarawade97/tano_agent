@@ -118,6 +118,19 @@ async def docs_agent_endpoint(
     request: DocsQueryRequest,
 ):
    
+    """
+    Handles a document query from the user and returns a response from the docs agent.
+
+    Args:
+        request (DocsQueryRequest): The request containing the user query and relevant documents.
+
+    Returns:
+        dict: A dictionary containing the response content from the docs agent.
+
+    Raises:
+        HTTPException: If there is an error generating the response or handling the request.
+    """
+
     try:
         
         # print(f'relevant docs : {request.relevant_docs}')

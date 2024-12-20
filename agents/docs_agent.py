@@ -30,6 +30,7 @@ def transfer_to_real_info_agent():
 
 
 # base agent
+
 docs_agent = Agent(
     name="Docs Agent",
     instructions="You are a helpful agent. Answer user questions based on the provided information. If you don't find the answer, consult the real info agent before responding.",

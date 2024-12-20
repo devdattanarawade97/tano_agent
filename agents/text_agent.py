@@ -42,6 +42,8 @@ real_info_agent = Agent(
     instructions="""You are an helpful AI agent . use functions for answering user question""",
     functions=[get_cohere_chat],
 )
+
+
 def transfer_to_real_info_agent():
     """
     Transfers the conversation to the Real Info Agent.
